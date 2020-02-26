@@ -9,16 +9,35 @@ using System.Threading.Tasks;
 
 namespace Mask
 {
+    /// <summary>
+    /// 没想继承来着，但是webclient没有timeout就很难受。。。
+    /// </summary>
     class MaskWebClient : WebClient
     {
+        /// <summary>
+        /// 抢口罩地址
+        /// </summary>
         const string APPOINTMENT = @"http://smy.zwfw.dl.gov.cn/masks-manage/api/main/getMaskMaskorder";
+
+        /// <summary>
+        /// 获取商店列表地址
+        /// </summary>
         const string SHOPLIST = @"http://smy.zwfw.dl.gov.cn/masks-manage/api/main/getMaskServiceinfoList";
+
+        /// <summary>
+        /// 设置UA,content-type,编码
+        /// </summary>
         public MaskWebClient()
         {
             this.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36");
             this.Headers.Add(HttpRequestHeader.ContentType, "application/json;charset=UTF-8");
             this.Encoding = Encoding.UTF8;
         }
+
+        /// <summary>
+        /// 获取商店列表
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<ShopInfo>> GetShopList()
         {
             try
@@ -36,6 +55,13 @@ namespace Mask
                 throw new Exception("获取药店列表失败，请重新启动软件");
             }
         }
+
+        /// <summary>
+        /// 预约口罩
+        /// </summary>
+        /// <param name="parm"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public bool MakeAppointment(RequestParm parm, out string result)
         {
             var json = JsonConvert.SerializeObject(parm);
@@ -58,6 +84,11 @@ namespace Mask
             }
         }
 
+        /// <summary>
+        /// 设置超时时间 30 秒
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
         protected override WebRequest GetWebRequest(Uri address)
         {
             var req = base.GetWebRequest(address);

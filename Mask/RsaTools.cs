@@ -8,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace Mask
 {
+    /// <summary>
+    /// RSA加密工具类，能改的可能就是Key了 -_-||
+    /// </summary>
     static class RSATools
     {
+        /// <summary>
+        /// 公钥 取自网页js文件
+        /// </summary>
         static string key = @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDFZLucigIvl/AAliSrlP0QI8vxB11C9iAEsvvZto3A/yh9MIlCoKVFbUvqAEuLpxJxMqTDDJA4C7xoukAcyXJTEiEILeqBbqSxDlsxh+L3msaim+ZKKoUnJvxuekJyFOi9H0seZbS/WytkqKhKmATOe0w94JMHFkFFON4QyERehwIDAQAB";
         public static string RSAEncrypt(this string content)
         {
