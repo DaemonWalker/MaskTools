@@ -38,14 +38,17 @@
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colJson = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.timeAutoStop = new System.Windows.Forms.DateTimePicker();
+            this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtFilter = new System.Windows.Forms.TextBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.txtTel = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtID = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnGO = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtThreadNum = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -117,7 +120,8 @@
             this.colName,
             this.Column1,
             this.Column2,
-            this.Column3});
+            this.Column3,
+            this.colJson});
             this.dgvResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvResult.Location = new System.Drawing.Point(0, 173);
             this.dgvResult.Name = "dgvResult";
@@ -155,15 +159,25 @@
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
             // 
+            // colJson
+            // 
+            this.colJson.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colJson.DataPropertyName = "Json";
+            this.colJson.HeaderText = "返回信息";
+            this.colJson.Name = "colJson";
+            this.colJson.ReadOnly = true;
+            // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.timeAutoStop);
+            this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.txtFilter);
             this.panel2.Controls.Add(this.txtName);
             this.panel2.Controls.Add(this.txtTel);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.txtID);
-            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.btnGO);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.txtThreadNum);
             this.panel2.Controls.Add(this.label2);
@@ -174,6 +188,25 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(881, 173);
             this.panel2.TabIndex = 12;
+            // 
+            // timeAutoStop
+            // 
+            this.timeAutoStop.Font = new System.Drawing.Font("宋体", 12F);
+            this.timeAutoStop.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.timeAutoStop.Location = new System.Drawing.Point(559, 16);
+            this.timeAutoStop.Name = "timeAutoStop";
+            this.timeAutoStop.Size = new System.Drawing.Size(200, 26);
+            this.timeAutoStop.TabIndex = 14;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("MS UI Gothic", 14F);
+            this.label7.Location = new System.Drawing.Point(468, 19);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(85, 19);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "抢到几点";
             // 
             // label6
             // 
@@ -190,7 +223,7 @@
             this.txtFilter.Font = new System.Drawing.Font("MS UI Gothic", 14F);
             this.txtFilter.Location = new System.Drawing.Point(149, 16);
             this.txtFilter.Name = "txtFilter";
-            this.txtFilter.Size = new System.Drawing.Size(670, 26);
+            this.txtFilter.Size = new System.Drawing.Size(240, 26);
             this.txtFilter.TabIndex = 11;
             this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
             // 
@@ -227,16 +260,16 @@
             this.txtID.Size = new System.Drawing.Size(240, 26);
             this.txtID.TabIndex = 2;
             // 
-            // button1
+            // btnGO
             // 
-            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 16F);
-            this.button1.Location = new System.Drawing.Point(434, 92);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(190, 63);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "开抢";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnGO.Font = new System.Drawing.Font("MS UI Gothic", 16F);
+            this.btnGO.Location = new System.Drawing.Point(434, 92);
+            this.btnGO.Name = "btnGO";
+            this.btnGO.Size = new System.Drawing.Size(190, 63);
+            this.btnGO.TabIndex = 8;
+            this.btnGO.Text = "开抢";
+            this.btnGO.UseVisualStyleBackColor = true;
+            this.btnGO.Click += new System.EventHandler(this.btnGO_Click);
             // 
             // label1
             // 
@@ -310,7 +343,7 @@
 
         private System.Windows.Forms.DataGridView dgvShops;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnGO;
         private System.Windows.Forms.TextBox txtThreadNum;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
@@ -327,10 +360,13 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridView dgvResult;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colJson;
+        private System.Windows.Forms.DateTimePicker timeAutoStop;
     }
 }
 

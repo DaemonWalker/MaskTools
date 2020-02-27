@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Drawing;
 using System.Collections.Concurrent;
+using System.Threading;
 
 namespace Mask
 {
@@ -64,6 +65,7 @@ namespace Mask
             txtFilter.Text = ConfigurationManager.AppSettings["word"];
             txtThreadNum.Text = "10";
             shops = await new MaskWebClient().GetShopList();
+            this.timeAutoStop.Value = DateTime.Now.Date.AddHours(21);
         }
 
         /// <summary>
@@ -100,8 +102,12 @@ namespace Mask
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void btnGO_Click(object sender, EventArgs e)
         {
+            if (this.currentShop == null)
+            {
+                MessageBox.Show("请等待商店列表加载完毕，然后再选择一个~");
+            }
             var parm = new RequestParm()
             {
                 pharmacyName = currentShop.serviceName,
@@ -112,34 +118,45 @@ namespace Mask
                 mobile = txtTel.Text.Trim().RSAEncrypt()
             };
 
+            var endTime = this.timeAutoStop.Value;
             // 新开一个线程 防止卡死
+            var cts = new CancellationTokenSource();
             Task.Run(() =>
             {
-                var tasks = Enumerable.Range(0, int.Parse(txtThreadNum.Text)).Select(p => new Task(() =>
+                // 循环生成若干个线程抢口罩 每次等待10秒
+                do
                 {
-                    var appointmentReuslt = new AppointmentResult()
+                    Task.Run(() =>
                     {
-                        Time = DateTime.Now,
-                        Name = txtName.Text,
-                        ShopName = this.currentShop.serviceName
-                    };
-                    if (new MaskWebClient().MakeAppointment(parm, out var result))
-                    {
-                        appointmentReuslt.Result = "成功";
-                        MessageBox.Show("预约成功");
-                    }
-                    else
-                    {
-                        appointmentReuslt.Result = "失败";
-                        File.AppendAllText("log.log", $"{DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss:fff")} 预约失败 {result}\n");
-                    }
-                    appointmentResults.Add(appointmentReuslt);
-                    BindResult();
-                })).ToList();
-                tasks.ForEach(p => p.Start());
-                Task.WaitAll(tasks.ToArray());
+                        var tasks = Enumerable.Range(0, int.Parse(txtThreadNum.Text)).Select(p => new Task(() =>
+                        {
+                            var appointmentReuslt = new AppointmentResult()
+                            {
+                                Time = DateTime.Now,
+                                Name = txtName.Text,
+                                ShopName = this.currentShop.serviceName
+                            };
+                            if (new MaskWebClient().MakeAppointment(parm, out var json))
+                            {
+                                appointmentReuslt.Result = "成功";
+                                MessageBox.Show("预约成功");
+                                cts.Cancel();
+                            }
+                            else
+                            {
+                                appointmentReuslt.Result = "失败";
+                            }
+                            appointmentReuslt.Json = json;
+                            appointmentResults.Add(appointmentReuslt);
+                            BindResult();
+                        }, cts.Token)).ToList();
+                        tasks.ForEach(p => p.Start());
+                        Task.WaitAll(tasks.ToArray());
+                    }, cts.Token);
+                    Thread.Sleep(10000);
+                } while (endTime >= DateTime.Now);
                 MessageBox.Show("全部线程执行完毕，没提示就是没抢到了...");
-            });
+            }, cts.Token);
         }
 
         /// <summary>
@@ -163,7 +180,7 @@ namespace Mask
             }
             else
             {
-                this.dgvResult.DataSource = appointmentResults.ToList();
+                this.dgvResult.DataSource = appointmentResults.OrderByDescending(p => p, AppointmentResultComparer.Instance).ToList();
             }
         }
 

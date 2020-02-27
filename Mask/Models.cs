@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,5 +39,23 @@ namespace Mask
         public string Result { get; set; }
         public string Name { get; set; }
         public string ShopName { get; set; }
+        public string Json { get; set; }
+    }
+
+    class AppointmentResultComparer : IComparer<AppointmentResult>
+    {
+        public static AppointmentResultComparer Instance { get; } = new AppointmentResultComparer();
+        public int Compare(AppointmentResult x, AppointmentResult y)
+        {
+            if (x.Result.Contains("成功"))
+            {
+                return 1.CompareTo(2);
+            }
+            if (y.Result.Contains("成功"))
+            {
+                return 2.CompareTo(1);
+            }
+            return x.Time.CompareTo(y.Time);
+        }
     }
 }

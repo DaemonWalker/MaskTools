@@ -24,14 +24,17 @@ namespace Mask
         /// </summary>
         const string SHOPLIST = @"http://smy.zwfw.dl.gov.cn/masks-manage/api/main/getMaskServiceinfoList";
 
+        private int timeout;
+
         /// <summary>
         /// 设置UA,content-type,编码
         /// </summary>
-        public MaskWebClient()
+        public MaskWebClient(int timeout = 30000)
         {
             this.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36");
             this.Headers.Add(HttpRequestHeader.ContentType, "application/json;charset=UTF-8");
             this.Encoding = Encoding.UTF8;
+            this.timeout = timeout;
         }
 
         /// <summary>
@@ -68,7 +71,7 @@ namespace Mask
             try
             {
                 result = this.UploadString(APPOINTMENT, "POST", json);
-                if (result.Contains("200") || result.Contains("成功"))
+                if (result.Contains("200") || result.Contains("成功") || result.Contains("5天"))
                 {
                     return true;
                 }
@@ -92,7 +95,7 @@ namespace Mask
         protected override WebRequest GetWebRequest(Uri address)
         {
             var req = base.GetWebRequest(address);
-            req.Timeout = 30000;
+            req.Timeout = timeout;
             return req;
         }
     }
