@@ -180,7 +180,7 @@ namespace Mask
             }
             else
             {
-                this.dgvResult.DataSource = appointmentResults.OrderByDescending(p => p, AppointmentResultComparer.Instance).ToList();
+                this.dgvResult.DataSource = appointmentResults.OrderByDescending(p => p, AppointmentResultComparer.Instance).Take(50).ToList();
             }
         }
 

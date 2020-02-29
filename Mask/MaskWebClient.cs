@@ -17,12 +17,12 @@ namespace Mask
         /// <summary>
         /// 抢口罩地址
         /// </summary>
-        const string APPOINTMENT = @"http://smy.zwfw.dl.gov.cn/masks-manage/api/main/getMaskMaskorder";
+        const string APPOINTMENT = @"https://national.eshiyun.info/masks-manage/api/main/getMaskMaskorder";
 
         /// <summary>
         /// 获取商店列表地址
         /// </summary>
-        const string SHOPLIST = @"http://smy.zwfw.dl.gov.cn/masks-manage/api/main/getMaskServiceinfoList";
+        const string SHOPLIST = @"https://national.eshiyun.info/masks-manage/api/main/getMaskServiceinfoList";
 
         private int timeout;
 
@@ -33,6 +33,7 @@ namespace Mask
         {
             this.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36");
             this.Headers.Add(HttpRequestHeader.ContentType, "application/json;charset=UTF-8");
+            this.Headers.Add("X-Requested-With", "mobi.wonders.android.apps.smy");
             this.Encoding = Encoding.UTF8;
             this.timeout = timeout;
         }
