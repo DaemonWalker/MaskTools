@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,16 @@ namespace Mask
         /// 获取商店列表地址
         /// </summary>
         const string SHOPLIST = @"https://national.eshiyun.info/masks-manage/api/main/getMaskServiceinfoList";
+
+        /// <summary>
+        /// 用于检查是否预约成功
+        /// </summary>
+        const string MYORDER = @"https://national.eshiyun.info/masks-manage/myOrder";
+
+        /// <summary>
+        /// 用于检查更新
+        /// </summary>
+        const string UPDATEAPI = @"https://api.github.com/repos/DaemonWalker/MaskTools/releases/latest";
 
         private int timeout;
 
@@ -46,6 +57,7 @@ namespace Mask
         {
             try
             {
+                this.timeout = 30000;
                 var json = await this.UploadStringTaskAsync(SHOPLIST, "POST", @"{""serviceName"":"""",""page"":1,""limit"":130,""lng"":""110.299877"",""lat"":""20.014208"",""area"":""""}");
                 return JArray.Parse(JObject.Parse(JObject.Parse(json)["result"].ToString())["list"].ToString()).Select(p => new ShopInfo()
                 {
@@ -60,6 +72,21 @@ namespace Mask
             }
         }
 
+        public bool IsSuccessed(string idCard, string targetDate)
+        {
+            var json = JsonConvert.SerializeObject(new { idcard = idCard.RSAEncrypt(), limit = 20, page = 1, subscribeChannel = 0 });
+            this.timeout = 5000;
+            var result = this.UploadString(MYORDER, "POST", json);
+            if (result.Contains(targetDate))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// 预约口罩
         /// </summary>
@@ -68,6 +95,7 @@ namespace Mask
         /// <returns></returns>
         public bool MakeAppointment(RequestParm parm, out string result)
         {
+            this.timeout = 3000;
             var json = JsonConvert.SerializeObject(parm);
             try
             {
@@ -88,6 +116,33 @@ namespace Mask
             }
         }
 
+        public bool CheckUpdate(out string downloadUrl)
+        {
+            this.timeout = 10000;
+            try
+            {
+                var json = this.DownloadString(UPDATEAPI);
+                var version = JObject.Parse(json)["tag_name"].ToString();
+                var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                var remoteVersion = new Version(version.Replace("v", ""));
+                if (currentVersion < remoteVersion)
+                {
+                    downloadUrl = JArray.Parse(JObject.Parse(json)["assets"].ToString()).First()["browser_download_url"].ToString();
+                    return true;
+                }
+                else
+                {
+                    downloadUrl = string.Empty;
+                    return false;
+                }
+            }
+            catch
+            {
+                downloadUrl = string.Empty;
+                return false;
+            }
+        }
+
         /// <summary>
         /// 设置超时时间 30 秒
         /// </summary>
@@ -96,7 +151,7 @@ namespace Mask
         protected override WebRequest GetWebRequest(Uri address)
         {
             var req = base.GetWebRequest(address);
-            req.Timeout = timeout;
+            req.Timeout = this.timeout;
             return req;
         }
     }

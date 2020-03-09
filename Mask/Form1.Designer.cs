@@ -54,6 +54,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvShops)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResult)).BeginInit();
@@ -75,7 +77,7 @@
             this.dgvShops.ReadOnly = true;
             this.dgvShops.RowTemplate.Height = 21;
             this.dgvShops.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvShops.Size = new System.Drawing.Size(881, 366);
+            this.dgvShops.Size = new System.Drawing.Size(970, 366);
             this.dgvShops.TabIndex = 0;
             this.dgvShops.SelectionChanged += new System.EventHandler(this.dgvShops_SelectionChanged);
             // 
@@ -108,7 +110,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 366);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(881, 342);
+            this.panel1.Size = new System.Drawing.Size(970, 342);
             this.panel1.TabIndex = 1;
             // 
             // dgvResult
@@ -128,7 +130,7 @@
             this.dgvResult.ReadOnly = true;
             this.dgvResult.RowTemplate.Height = 23;
             this.dgvResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvResult.Size = new System.Drawing.Size(881, 169);
+            this.dgvResult.Size = new System.Drawing.Size(970, 169);
             this.dgvResult.TabIndex = 13;
             // 
             // colName
@@ -169,6 +171,8 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnUpdate);
+            this.panel2.Controls.Add(this.btnStop);
             this.panel2.Controls.Add(this.timeAutoStop);
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.label6);
@@ -186,7 +190,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(881, 173);
+            this.panel2.Size = new System.Drawing.Size(970, 173);
             this.panel2.TabIndex = 12;
             // 
             // timeAutoStop
@@ -195,7 +199,7 @@
             this.timeAutoStop.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.timeAutoStop.Location = new System.Drawing.Point(559, 16);
             this.timeAutoStop.Name = "timeAutoStop";
-            this.timeAutoStop.Size = new System.Drawing.Size(200, 26);
+            this.timeAutoStop.Size = new System.Drawing.Size(91, 26);
             this.timeAutoStop.TabIndex = 14;
             // 
             // label7
@@ -246,9 +250,9 @@
             // label5
             // 
             this.label5.Font = new System.Drawing.Font("MS UI Gothic", 14F);
-            this.label5.Location = new System.Drawing.Point(655, 59);
+            this.label5.Location = new System.Drawing.Point(667, 16);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(164, 96);
+            this.label5.Size = new System.Drawing.Size(291, 65);
             this.label5.TabIndex = 9;
             this.label5.Text = "地址信息";
             // 
@@ -265,7 +269,7 @@
             this.btnGO.Font = new System.Drawing.Font("MS UI Gothic", 16F);
             this.btnGO.Location = new System.Drawing.Point(434, 92);
             this.btnGO.Name = "btnGO";
-            this.btnGO.Size = new System.Drawing.Size(190, 63);
+            this.btnGO.Size = new System.Drawing.Size(216, 63);
             this.btnGO.TabIndex = 8;
             this.btnGO.Text = "开抢";
             this.btnGO.UseVisualStyleBackColor = true;
@@ -286,7 +290,7 @@
             this.txtThreadNum.Font = new System.Drawing.Font("MS UI Gothic", 14F);
             this.txtThreadNum.Location = new System.Drawing.Point(559, 55);
             this.txtThreadNum.Name = "txtThreadNum";
-            this.txtThreadNum.Size = new System.Drawing.Size(65, 26);
+            this.txtThreadNum.Size = new System.Drawing.Size(91, 26);
             this.txtThreadNum.TabIndex = 7;
             // 
             // label2
@@ -319,11 +323,33 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "身份证号";
             // 
+            // btnStop
+            // 
+            this.btnStop.Font = new System.Drawing.Font("MS UI Gothic", 16F);
+            this.btnStop.Location = new System.Drawing.Point(671, 92);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(128, 63);
+            this.btnStop.TabIndex = 15;
+            this.btnStop.Text = "停止";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // btnUpdate
+            // 
+            this.btnUpdate.Font = new System.Drawing.Font("MS UI Gothic", 16F);
+            this.btnUpdate.Location = new System.Drawing.Point(830, 92);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(128, 63);
+            this.btnUpdate.TabIndex = 16;
+            this.btnUpdate.Text = "检查更新";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(881, 708);
+            this.ClientSize = new System.Drawing.Size(970, 708);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dgvShops);
             this.Name = "Form1";
@@ -367,6 +393,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn colJson;
         private System.Windows.Forms.DateTimePicker timeAutoStop;
+        private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btnStop;
     }
 }
 

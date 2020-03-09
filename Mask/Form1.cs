@@ -43,6 +43,11 @@ namespace Mask
         private ConcurrentBag<AppointmentResult> appointmentResults = new ConcurrentBag<AppointmentResult>();
 
         /// <summary>
+        /// 停止抢购用
+        /// </summary>
+        private List<CancellationTokenSource> cancellationTokenSources = new List<CancellationTokenSource>();
+
+        /// <summary>
         /// 构造函数
         /// </summary>
         public Form1()
@@ -121,6 +126,7 @@ namespace Mask
             var endTime = this.timeAutoStop.Value;
             // 新开一个线程 防止卡死
             var cts = new CancellationTokenSource();
+            cancellationTokenSources.Add(cts);
             Task.Run(() =>
             {
                 // 循环生成若干个线程抢口罩 每次等待10秒
@@ -195,6 +201,35 @@ namespace Mask
             ConfigurationManager.AppSettings.Set("id_card", txtID.Text);
             ConfigurationManager.AppSettings.Set("phone_no", txtTel.Text);
             ConfigurationManager.AppSettings.Set("word", txtFilter.Text);
+        }
+
+        /// <summary>
+        /// 停止抢购
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            cancellationTokenSources.ForEach(p => p.Cancel());
+            cancellationTokenSources.Clear();
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                if (new MaskWebClient().CheckUpdate(out var url))
+                {
+                    if (MessageBox.Show("有新版本，是否下载？", "更新", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(url);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("已经是最新版本");
+                }
+            });
         }
     }
 
